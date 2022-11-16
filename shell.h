@@ -1,37 +1,53 @@
-#ifndef SHELL_H
-#define SHELL_H
-
+#ifndef _SHELL_H_
+#define _SHELL_H_
+#include <dirent.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
+#include <sys/resource.h>
+#include <sys/stat.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <sys/stat.h>
-#include <limits.h>
-#include <fcntl.h>
-#include <errno.h>
-
-/* for read/write buffers */
-#define READ_BUF_SIZE 1024
-#define WRITE_BUF_SIZE 1024
-#define BUF_FLUSH -1
-
-/* for command chaining */
-#define CMD_NORM	0
-#define CMD_OR		1
-#define CMD_AND		2
-#define CMD_CHAIN	3
-
-/* for convert_number() */
-#define CONVERT_LOWERCASE	1
-#define CONVERT_UNSIGNED	2
-
-/* 1 if using system getline() */
-#define USE_GETLINE 0
-#define USE_STRTOK 0
-
-#define HIST_FILE	".simple_shell_history"
-#define HIST_MAX	4096
-
-extern char **environ;
+#include <unistd.h>
+#include "./stringfile/string.h"
+#include "linklist.h"
+#include "./memofile/memo.h"
+#include "shellvar.h"
+#include "./builtinfile/builtin.h"
+#include "./errorfile/error.h"
+#include "./shellhelperfile/shellhelper.h"
+#include "log.h"
+#define SPACE " "
+#define EQUAL "="
+#define COLON ":"
+#define BSLASH "\\"
+#define FSLASH "/"
+#define BUF_SIZE 4096
+#define PS1 write(STDOUT_FILENO, "MANDALORIAN$ ", 4)
+#define PS2 write(STDOUT_FILENO, "\nMANDALORIAN$ ", 5)
+#define NEWLINE write(STDOUT_FILENO, "\n", 1)
+#define DELIM " \t"
+/* _getline.c */
+ssize_t _getline(char **lineptr, size_t *n, int fd, list_t **mt);
+void reset_buffer(char *buffer, ssize_t buf_size);
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+char *_strdup(char *str, list_t **mt);
+unsigned int _strspn(char *s, char *accept);
+char *_strpbrk(char *s, char *accept);
+char *_strtok(char *s, const char *delim);
+unsigned int _strlen(char *s);
+/* string02.c */
+int _strcmp(char *s1, char *s2);
+int _atoi(char *s);
+char *_strcat(char *s1, char *s2, list_t **mt);
+char *_itoa(ssize_t num, list_t **mt);
+char *reverse_str(char *s);
+/* string03.c */
+char *_strchr(char *s, char c);
+void _chartostr(char *s, char c);
+#endif /* _SHELL_H_ */
+Footer
+© 2022 GitHub, Inc.
